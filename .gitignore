@@ -10,6 +10,6 @@ typings/
 # Node.js dependency directory
 node_modules/
 
-
+src/mail.json
 
 package-lock.json
