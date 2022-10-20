@@ -4,4 +4,5 @@ export class Contact {
   detail: string;
 
   email: string;
+  token: string;
 }

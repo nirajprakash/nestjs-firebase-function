@@ -9,19 +9,17 @@ import ss = require('./../mail.json');
 
 @Injectable()
 export class MailerService {
-  async sendMessage(contact: Contact) {
+  async sendMessage(contact: Contact): Promise<any> {
     // console.log("service account", serviceAccount)
     const transporter = nodemailer.createTransport({
       service: 'gmail',
       auth: {
         type: ss['type'], //'OAuth2',
         user: ss['user'],
-        serviceClient: ss['serviceClient'], 
+        serviceClient: ss['serviceClient'],
         privateKey: ss['privateKey'],
       },
     } as TransportOptions);
-
-
 
     const serviceEmail = ss['to'];
 
@@ -38,17 +36,21 @@ export class MailerService {
 
     // console.log("mailoptions ", mailOptions);
 
-    // let promise = new Promise((resolver, reject)=>{
-    transporter.sendMail(mailOptions, (erro, info) => {
-      if (erro) {
-        console.log('mail send error', erro);
-        throw erro;
-        // reject (erro)
-      }
+    const promise = new Promise((resolver, reject) => {
+      transporter.sendMail(mailOptions, (erro, info) => {
+        if (erro) {
+          console.log('mail send error', erro);
+          // throw erro;
+          reject(erro);
+          return;
+        }
 
-      console.log('mail send successfully');
-      return true; //res.status(200).json(mObject);
-      // resolver({"mailer": "success"});
+        console.log('mail send successfully');
+        // return true; //res.status(200).json(mObject);
+        resolver({ mailer: 'success' });
+      });
     });
+
+    return promise;
   }
 }
