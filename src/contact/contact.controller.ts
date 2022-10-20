@@ -10,6 +10,7 @@ import { lastValueFrom, map, Observable } from 'rxjs';
 import { Contact } from 'src/entities/contact.entities';
 import { MailerService } from 'src/mailer/mailer.service';
 
+import ss = require('./../config.json');
 @Controller('contact')
 export class ContactController {
   constructor(
@@ -32,7 +33,7 @@ export class ContactController {
               'Content-Type': 'application/json',
             },
             params: {
-              secret: '6Lci95YiAAAAAAySL-nbwM9E5JdMaC49OOzawMf9',
+              secret: ss.secret,
               response: contact.token,
             },
           },
