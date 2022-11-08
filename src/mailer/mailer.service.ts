@@ -1,30 +1,39 @@
 import { Injectable } from '@nestjs/common';
+import { ConfigService } from '@nestjs/config';
 import { topic } from 'firebase-functions/v1/pubsub';
 import * as nodemailer from 'nodemailer';
 import { TransportOptions } from 'nodemailer';
+import { MailCredentialModel } from 'src/config/mailCredential.model';
 import { EmailTemplateForm } from 'src/emails/templates';
 import { Contact } from 'src/entities/contact.entities';
 
-import ss = require('./../mail.json');
 
 @Injectable()
 export class MailerService {
+
+  constructor(
+    private configService: ConfigService
+  ){
+
+  }
   async sendMessage(contact: Contact): Promise<any> {
     // console.log("service account", serviceAccount)
+
+    var credential = this.configService.get<MailCredentialModel>('mail');
     const transporter = nodemailer.createTransport({
       service: 'gmail',
       auth: {
-        type: ss['type'], //'OAuth2',
-        user: ss['user'],
-        serviceClient: ss['serviceClient'],
-        privateKey: ss['privateKey'],
+        type: credential.type, //'OAuth2',
+        user: credential.user,
+        serviceClient: credential.serviceClient,
+        privateKey: credential.privateKey,
       },
     } as TransportOptions);
 
-    const serviceEmail = ss['to'];
+    const serviceEmail = credential.to;
 
     const mailOptions = {
-      from: ss['user'],
+      from: credential.user,
       to: serviceEmail,
       subject: 'portfolio',
       html: EmailTemplateForm.submitted(contact.name, JSON.stringify(contact)),

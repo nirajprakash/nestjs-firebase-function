@@ -6,16 +6,18 @@ import {
   HttpStatus,
   Post,
 } from '@nestjs/common';
+import { ConfigService } from '@nestjs/config';
 import { lastValueFrom, map, Observable } from 'rxjs';
+import { configuration } from 'src/config/configuration';
 import { Contact } from 'src/entities/contact.entities';
 import { MailerService } from 'src/mailer/mailer.service';
 
-import ss = require('./../config.json');
 @Controller('contact')
 export class ContactController {
   constructor(
     private mailerSerivce: MailerService,
     private readonly httpService: HttpService,
+    private configService: ConfigService
   ) {}
 
   @Post()
@@ -33,7 +35,7 @@ export class ContactController {
               'Content-Type': 'application/json',
             },
             params: {
-              secret: ss.secret,
+              secret: this.configService.get<string>("recaptchaSecret"),
               response: contact.token,
             },
           },

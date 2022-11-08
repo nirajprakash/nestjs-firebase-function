@@ -13,4 +13,4 @@ node_modules/
 src/mail.json
 src/config.json
 
-package-lock.json
+src/config/config.json

@@ -1,0 +1,12 @@
+{
+    "recaptchaSecret": "add secret here ",
+    "mail": {
+        "user": " user email address ",
+        "to": "receiver email address",
+        "type": "OAuth2",
+        "serviceClient": " email serviceClient ",
+        "privateKey": " user email privateKey "
+    
+    }
+   
+}
